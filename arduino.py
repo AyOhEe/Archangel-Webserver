@@ -106,12 +106,10 @@ class Arduino:
         return self.queue_out.qsize()
     
     def try_read_message(self):
-        if self.has_message():
-            try:
-                return True, self.queue_in.get_nowait()
-            except Empty:
-                return False, None
-        return False, None
+        try:
+            return True, self.queue_in.get_nowait()
+        except Empty:
+            return False, None
     
     def try_send_message(self, msg):
         try:
