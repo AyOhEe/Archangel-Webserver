@@ -36,6 +36,7 @@ class Arduino:
         self.READ_THREAD_REQUIRED = False
         self.SEND_THREAD_REQUIRED = False
 
+        #TODO use Thread.join 
         #wait until the threads clean up
         while self.SEND_THREAD_ACTIVE or self.READ_THREAD_ACTIVE:
             time.sleep(0.1)
@@ -91,7 +92,10 @@ class Arduino:
             self.SEND_THREAD_ACTIVE = True
 
             if (msg := get_message()):
-                self.serial.write(Arduino.encode(msg))
+                if isinstance(msg, bytes):
+                    self.serial.write(msg)
+                else:
+                    self.serial.write(Arduino.encode(msg))
                 print(f"<<Arduino[{self.port}:{self.baud}] send thread>> Sending: {msg}")
 
         self.SEND_THREAD_ACTIVE = False
@@ -121,11 +125,11 @@ class Arduino:
         
 
     @staticmethod
-    def encode(msg):
+    def encode(msg: str):
         return msg.encode("utf-8")
     
     @staticmethod
-    def decode(msg):
+    def decode(msg: bytes):
         return msg.decode("utf-8")
 
 
