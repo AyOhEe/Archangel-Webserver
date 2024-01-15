@@ -135,7 +135,7 @@ class Arduino:
 
 
 if __name__ == "__main__":
-    arduino = Arduino('COM3', 115200, serial_kwargs={"timeout": 0.1})
+    arduino = Arduino('/dev/ttyACM0', 115200, serial_kwargs={"timeout": 0.1})
    
     try:
         while True:

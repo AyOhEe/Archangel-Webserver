@@ -3,7 +3,7 @@ from arduino import Arduino
 import time
 
 
-ARDUINO_PORT = "COM3"
+ARDUINO_PORT = "/dev/ttyACM0"
 ARDUINO_BAUD = 115200
 SERIAL_KWARGS = {"timeout": 0.1}
 
