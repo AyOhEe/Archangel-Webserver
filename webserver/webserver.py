@@ -1,4 +1,5 @@
 import aiohttp_jinja2
+import aiohttp
 import jinja2
 
 from aiohttp import web
@@ -16,8 +17,33 @@ class Webserver(web.Application):
 
         self.add_routes([
             web.get("/", self.index),
-            web.post("/change_blink", self.change_blink)
+            web.get("/blinkrate_control.js", self.get_static("web/blinkrate_control.js")),
+
+            web.get("/blinkrate_ws", self.blinkrate_ws)
         ])
+
+    def get_static(self, path):
+        async def respond_static(request):
+            return web.FileResponse(path)
+
+        return respond_static
+
+    async def blinkrate_ws(self, request):
+        ws = web.WebSocketResponse()
+        await ws.prepare(request)
+
+        async for msg in ws:
+            if msg.type == aiohttp.WSMsgType.TEXT:
+                if msg.data == "close":
+                    await ws.close()
+                else:
+                    print(msg.data)
+                    self.ard.try_send_message(msg.data)
+            elif msg.type == aiohttp.WSMsgType.ERROR:
+                print("WS Error: " + ws.exception())
+
+        print("ws closed")
+        return ws
 
     async def index(self, request):
         context = {}
@@ -26,11 +52,7 @@ class Webserver(web.Application):
                                                   context)
         return response
 
-    async def change_blink(self, request):
-        blink_rate = (await request.post())["blinkrate"]
-        self.ard.try_send_message(blink_rate)
-        raise web.HTTPFound("/")
-
 if __name__ == "__main__":
     server = Webserver("../web")
     web.run_app(server)
+
