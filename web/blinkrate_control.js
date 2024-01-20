@@ -8,7 +8,7 @@ function connectToWS(){
       new_uri = "ws:";
   }
   new_uri += "//" + loc.host;
-  new_uri += loc.pathname + "/blinkrate_ws";
+  new_uri += loc.pathname + "blinkrate_ws";
 
   ws = new WebSocket(new_uri);
 }
