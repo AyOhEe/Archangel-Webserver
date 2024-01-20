@@ -1,6 +1,16 @@
 var ws = null;
 function connectToWS(){
-  ws = new WebSocket("ws://10.42.0.1:8080/blinkrate_ws");
+  //https://stackoverflow.com/a/10418013 
+  var loc = window.location, new_uri;
+  if (loc.protocol === "https:") {
+      new_uri = "wss:";
+  } else {
+      new_uri = "ws:";
+  }
+  new_uri += "//" + loc.host;
+  new_uri += loc.pathname + "/blinkrate_ws";
+
+  ws = new WebSocket(new_uri);
 }
 
 function sendToWS(data){
