@@ -25,9 +25,9 @@ class Webserver(web.Application):
         aiohttp_jinja2.setup(self, loader=jinja2.FileSystemLoader(templates_path))
         self.add_routes([
             web.get("/", self.index),
-            web.get("/blinkrate_control.js", self.get_static("web/blinkrate_control.js")),
+            web.get("/servo_control.js", self.get_static("web/servo_control.js")),
 
-            web.get("/blinkrate_ws", self.blinkrate_ws)
+            web.get("/servo_state", self.servo_state)
         ])
         
         self.ard = self.create_arduino()
@@ -49,7 +49,7 @@ class Webserver(web.Application):
 
         return respond_static
 
-    async def blinkrate_ws(self, request):
+    async def servo_state(self, request):
         ws = web.WebSocketResponse()
         await ws.prepare(request)
 

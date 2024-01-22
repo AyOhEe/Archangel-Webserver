@@ -6,10 +6,18 @@
     <body>
         <h1>Hello, world!</h1>
         <div>
-            <label for="blinkrate" id="blinkrate_label" style="width:200px; display:inline-block;">Blink rate (ms): </label>
-            <input type="range" min="50" max="2000" class="slider" name="blinkrate" id="blinkrate_slider">
+            <label for="servo_1" id="servo_1_label" style="width:200px; display:inline-block;">Servo 1 angle: 0</label>
+            <input type="range" min="0" value="0" max="180" class="slider" name="servo_1" id="servo_1_slider">
+        </div>
+        <div>
+            <label for="servo_2" id="servo_2_label" style="width:200px; display:inline-block;">Servo 2 angle: 0</label>
+            <input type="range" min="0" value="0" max="180" class="slider" name="servo_2" id="servo_2_slider">
+        </div>
+        <div>
+            <label for="servo_3" id="servo_3_label" style="width:200px; display:inline-block;">Servo 3 angle: 0</label>
+            <input type="range" min="0" value="0" max="180" class="slider" name="servo_3" id="servo_3_slider">
         </div>
     </body>
 
-    <script src="blinkrate_control.js"></script>
+    <script src="servo_control.js"></script>
 </html>
