@@ -6,10 +6,9 @@ import threading
 from queue import Queue, Empty, Full
 
 
-ARDUINO_READ_TIMEOUT = 1
-
-
 class Arduino:
+    ARDUINO_READ_TIMEOUT = 1
+
     def __init__(self, port, baud, serial_args=(), serial_kwargs={}):
         self.queue_in = Queue() #messages coming in to the computer
         self.queue_out = Queue()#messages going out to the arduino
