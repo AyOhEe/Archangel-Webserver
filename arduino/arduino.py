@@ -16,6 +16,7 @@ class Arduino:
         self.port = port
         self.baud = baud
         self.serial = serial.Serial(port, baud, *serial_args, **serial_kwargs)
+        self.serial.timeout = Arduino.ARDUINO_READ_TIMEOUT
         self.serial.flush()
 
         self.READ_THREAD_REQUIRED = True
@@ -34,11 +35,8 @@ class Arduino:
 
         self.READ_THREAD_REQUIRED = False
         self.SEND_THREAD_REQUIRED = False
-
-        #TODO use Thread.join 
-        #wait until the threads clean up
-        while self.SEND_THREAD_ACTIVE or self.READ_THREAD_ACTIVE:
-            time.sleep(0.1)
+        self.read_thread.join()
+        self.send_thread.join()
 
 
 

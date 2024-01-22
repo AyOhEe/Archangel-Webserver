@@ -1,5 +1,6 @@
 import aiohttp_jinja2
 import aiohttp
+import asyncio
 import jinja2
 import os
 
@@ -30,6 +31,11 @@ class Webserver(web.Application):
         ])
         
         self.ard = self.create_arduino()
+
+        self.on_shutdown.append(self.close_arduino)
+
+    async def close_arduino(self, app):
+        self.ard.shutdown()
 
     def create_arduino(self):
         if Webserver.USE_DUMMY_ARDUINO:

@@ -7,6 +7,9 @@ class DummyArduino:
     def try_read_message(self):
         return False, None
     
+    def shutdown(self):
+        pass
+    
     def count_messages_in(self):
         return 0
     
