@@ -12,11 +12,15 @@ from arduino import DummyArduino
 
 
 class Webserver(web.Application):
-    USE_DUMMY_ARDUINO = False
-    if os.name ==  "nt":
-        ARDUINO_PORT = "COM1"
-    else:
-        ARDUINO_PORT = "/dev/ttyACM0"
+    @classmethod
+    def prepare_configs(cls, config):
+        cls.USE_DUMMY_ARDUINO = config["Webserver"].getboolean("UseDummyArduino", False)
+        cls.ARDUINO_PORT = config["Webserver"].get("ArduinoPort", "/dev/ttyACM0")
+
+        if cls.USE_DUMMY_ARDUINO:
+            print("Using DummyArduino class")
+
+        print(f"Using Arduino port: {cls.ARDUINO_PORT}")
 
 
     def __init__(self, templates_path, *args, **kwargs):
@@ -26,6 +30,7 @@ class Webserver(web.Application):
         self.add_routes([
             web.get("/", self.index),
             web.get("/servo_control.js", self.get_static("web/servo_control.js")),
+            web.get("/bootstrap.css", self.get_static("web/bootstrap.css")),
 
             web.get("/servo_state", self.servo_state)
         ])
@@ -42,6 +47,7 @@ class Webserver(web.Application):
             return DummyArduino()
         else:
             return Arduino(Webserver.ARDUINO_PORT, 115200)
+
 
     def get_static(self, path):
         async def respond_static(request):
